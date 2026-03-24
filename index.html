@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tip Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e1e2e, #2d2d44);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(45, 45, 68, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #64ffda;
+            font-size: 2rem;
+            font-weight: 300;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #b8b8d1;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            background: rgba(30, 30, 46, 0.6);
+            color: #ffffff;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #64ffda;
+            box-shadow: 0 0 0 3px rgba(100, 255, 218, 0.1);
+        }
+
+        .slider-container {
+            position: relative;
+            margin: 15px 0;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #64ffda;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(100, 255, 218, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(100, 255, 218, 0.4);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #64ffda;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 4px 8px rgba(100, 255, 218, 0.3);
+        }
+
+        .tip-display {
+            text-align: center;
+            margin: 10px 0;
+            font-size: 1.2rem;
+            color: #64ffda;
+            font-weight: 600;
+        }
+
+        select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            background: rgba(30, 30, 46, 0.6);
+            color: #ffffff;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #64ffda;
+            box-shadow: 0 0 0 3px rgba(100, 255, 218, 0.1);
+        }
+
+        select option {
+            background: #1e1e2e;
+            color: #ffffff;
+        }
+
+        .result {
+            background: linear-gradient(135deg, #64ffda, #4fc3f7);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            margin-top: 30px;
+            box-shadow: 0 10px 20px rgba(100, 255, 218, 0.2);
+        }
+
+        .result-label {
+            color: #1e1e2e;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .result-amount {
+            color: #1e1e2e;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .breakdown {
+            background: rgba(30, 30, 46, 0.4);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .breakdown-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: #b8b8d1;
+        }
+
+        .breakdown-row:last-child {
+            margin-bottom: 0;
+            font-weight: 600;
+            color: #64ffda;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 1.7rem;
+            }
+
+            .result-amount {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💰 Tip Calculator</h1>
+        
+        <div class="input-group">
+            <label for="billAmount">Bill Amount</label>
+            <input type="number" id="billAmount" placeholder="0.00" step="0.01" min="0">
+        </div>
+
+        <div class="input-group">
+            <label for="tipPercentage">Tip Percentage</label>
+            <input type="range" id="tipPercentage" min="0" max="30" value="18" step="1">
+            <div class="tip-display" id="tipDisplay">18%</div>
+        </div>
+
+        <div class="input-group">
+            <label for="peopleCount">Number of People</label>
+            <select id="peopleCount">
+                <option value="1">1 person</option>
+                <option value="2" selected>2 people</option>
+                <option value="3">3 people</option>
+                <option value="4">4 people</option>
+                <option value="5">5 people</option>
+                <option value="6">6 people</option>
+                <option value="7">7 people</option>
+                <option value="8">8 people</option>
+                <option value="9">9 people</option>
+                <option value="10">10 people</option>
+            </select>
+        </div>
+
+        <div class="result">
+            <div class="result-label">Per Person Amount</div>
+            <div class="result-amount" id="perPersonAmount">$0.00</div>
+        </div>
+
+        <div class="breakdown">
+            <div class="breakdown-row">
+                <span>Bill Amount:</span>
+                <span id="billDisplay">$0.00</span>
+            </div>
+            <div class="breakdown-row">
+                <span>Tip Amount:</span>
+                <span id="tipAmount">$0.00</span>
+            </div>
+            <div class="breakdown-row">
+                <span>Total Amount:</span>
+                <span id="totalAmount">$0.00</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get DOM elements
+        const billAmountInput = document.getElementById('billAmount');
+        const tipPercentageInput = document.getElementById('tipPercentage');
+        const tipDisplay = document.getElementById('tipDisplay');
+        const peopleCountSelect = document.getElementById('peopleCount');
+        const perPersonAmountDisplay = document.getElementById('perPersonAmount');
+        const billDisplay = document.getElementById('billDisplay');
+        const tipAmountDisplay = document.getElementById('tipAmount');
+        const totalAmountDisplay = document.getElementById('totalAmount');
+
+        // Format currency
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2
+            }).format(amount);
+        }
+
+        // Calculate and update all values
+        function calculateTip() {
+            const billAmount = parseFloat(billAmountInput.value) || 0;
+            const tipPercentage = parseInt(tipPercentageInput.value);
+            const peopleCount = parseInt(peopleCountSelect.value);
+
+            // Update tip percentage display
+            tipDisplay.textContent = `${tipPercentage}%`;
+
+            // Calculate amounts
+            const tipAmount = billAmount * (tipPercentage / 100);
+            const totalAmount = billAmount + tipAmount;
+            const perPersonAmount = totalAmount / peopleCount;
+
+            // Update displays
+            billDisplay.textContent = formatCurrency(billAmount);
+            tipAmountDisplay.textContent = formatCurrency(tipAmount);
+            totalAmountDisplay.textContent = formatCurrency(totalAmount);
+            perPersonAmountDisplay.textContent = formatCurrency(perPersonAmount);
+        }
+
+        // Add event listeners for real-time updates
+        billAmountInput.addEventListener('input', calculateTip);
+        tipPercentageInput.addEventListener('input', calculateTip);
+        peopleCountSelect.addEventListener('change', calculateTip);
+
+        // Initialize calculation
+        calculateTip();
+
+        // Add some nice interactions
+        billAmountInput.addEventListener('focus', function() {
+            this.select();
+        });
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.activeElement.blur();
+            }
+        });
+    </script>
+</body>
+</html>
